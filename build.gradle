@@ -1,0 +1,61 @@
+plugins {
+    id "io.spring.dependency-management" version "1.0.4.RELEASE"
+    id 'org.openrepose.gradle.plugins.jaxb' version '2.4.1'
+}
+
+group 'ehealth-connector'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+dependencyManagement {
+    dependencies {
+        imports {
+            mavenBom 'org.springframework.boot:spring-boot-starter-parent:2.0.1.RELEASE'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url "http://repo.ehealth.fgov.be/artifactory/maven2-cache"
+    }
+    maven {
+        url "http://repo.ehealth.fgov.be/artifactory/maven2"
+    }
+
+    maven {
+        url "https://www.e-contract.be/maven2/"
+    }
+}
+
+configurations.all {
+//    exclude group: 'be.fgov.ehealth.connector', module: 'connector-technical-smartcardio'
+    exclude group: 'be.fgov.ehealth.connector', module: 'connector-utilities-timestamping'
+    exclude group: 'ch.qos.logback', module:'logback-classic'
+    exclude group: 'com.sun.security', module:'pkcs11'
+}
+
+dependencies {
+    jaxb 'javax.activation:activation:1.1.1'
+
+    compile 'be.fgov.ehealth.connector:connector-technical-core:3.15.1'
+    compile 'be.fgov.ehealth.connector:connector-utilities-timestamping:3.14.2'
+    compile 'be.fgov.ehealth.etee:etee-crypto-master:2.1.2'
+    compile 'be.fedict.commons-eid:commons-eid-bom:0.8.0'
+
+    compile 'com.sun.xml.messaging.saaj:saaj-impl:1.3'
+    compile 'javax.activation:activation:1.1.1'
+    compile 'javax.xml.soap:javax.xml.soap-api:1.4.0'
+    compile 'javax.xml.bind:jaxb-api:2.3.0'
+    compile 'javax.xml.ws:jaxws-api:2.3.0'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+//    compile 'be.fgov.ehealth.connector:connector-packaging-persphysiotherapist:3.15.1'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
